@@ -7,14 +7,7 @@ import (
 
 // ModelSpec represents the specification of a model , including the
 // feature's name and it's detailed specification
-type ModelSpec struct {
-	// FeatureName is the name of the feature in the model.
-	FeatureName string `json:"feature_name"`
-	// Spec defines the datatype and optional constraints associated with
-	// the feature. This struct includes the dtype (e.g., "float", "string")
-	// and an optional Constraint that further limits valid values.
-	Spec Spec `json:"spec"`
-}
+type ModelSpec map[string]Spec
 
 // Spec defines the datatype and optional constraints for a model feature.
 // It includes fields for specifying numeric boundaries or valid string values
@@ -34,11 +27,11 @@ type Spec struct {
 type Constraint struct {
 	// NumericConstraint specifies constraints for numeric data types,
 	// such as mean and standard deviation.
-	NumericConstraint NumericConstraint `json:"numeric_constraint,omitempty"`
+	NumericConstraint *NumericConstraint `json:"numeric_constraint,omitempty"`
 
 	// StringConstraint specifies constraints for string data types,
 	// such as a set of acceptable values.
-	StringConstraint StringConstraint `json:"string_constraint,omitempty"`
+	StringConstraint *StringConstraint `json:"string_constraint,omitempty"`
 }
 
 // NumericConstraint defines constraints for numeric feature data.
@@ -82,5 +75,12 @@ func ParseModelSpec(data []byte) (*ModelSpec, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse model spec: %w", err)
 	}
+
+	// Validate model spec
+	err = modelSpec.Validate()
+	if err != nil {
+		return nil, fmt.Errorf("failed to validate model spec: %w", err)
+	}
+
 	return &modelSpec, nil
 }
