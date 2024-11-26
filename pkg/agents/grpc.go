@@ -2,9 +2,9 @@ package agents
 
 import (
 	"errors"
-	"github.com/gagansingh894/InferFlux/pkg/generator"
 	"math/rand"
 
+	"github.com/gagansingh894/InferFlux/pkg/generator"
 	"github.com/gagansingh894/InferFlux/types"
 )
 
