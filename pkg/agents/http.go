@@ -2,6 +2,7 @@ package agents
 
 import (
 	"errors"
+	"github.com/gagansingh894/InferFlux/pkg/generator"
 	"math/rand"
 
 	"github.com/gagansingh894/InferFlux/types"
@@ -13,22 +14,22 @@ func NewHTTPAgent() (*HTTPAgent, error) {
 	return &HTTPAgent{}, nil
 }
 
-func (a *HTTPAgent) GenerateWithRandomSize(modelSpec types.ModelSpec) DataGen {
-	out := make(DataGen)
+func (a *HTTPAgent) GenerateWithRandomSize(modelSpec types.ModelSpec) generator.DataGen {
+	out := make(generator.DataGen)
 	size := rand.Intn(1500) + 1
 
 	for key, value := range modelSpec {
 		switch value.Dtype {
 		case types.String:
-			out[key] = generateStringData(value.Constraint.StringConstraint.Values, size)
+			out[key] = generator.GenerateStringData(value.Constraint.StringConstraint.Values, size)
 		case types.Int:
-			out[key] = generateIntegerData(
+			out[key] = generator.GenerateIntegerData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				size,
 			)
 		case types.Float:
-			out[key] = generateFloatData(
+			out[key] = generator.GenerateFloatData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				size,
@@ -39,8 +40,8 @@ func (a *HTTPAgent) GenerateWithRandomSize(modelSpec types.ModelSpec) DataGen {
 	return out
 }
 
-func (a *HTTPAgent) GenerateWithFixedSize(modelSpec types.ModelSpec, size int) (DataGen, error) {
-	out := make(DataGen)
+func (a *HTTPAgent) GenerateWithFixedSize(modelSpec types.ModelSpec, size int) (generator.DataGen, error) {
+	out := make(generator.DataGen)
 
 	if size <= 0 {
 		return nil, errors.New("size must be greater than zero")
@@ -49,15 +50,15 @@ func (a *HTTPAgent) GenerateWithFixedSize(modelSpec types.ModelSpec, size int) (
 	for key, value := range modelSpec {
 		switch value.Dtype {
 		case types.String:
-			out[key] = generateStringData(value.Constraint.StringConstraint.Values, size)
+			out[key] = generator.GenerateStringData(value.Constraint.StringConstraint.Values, size)
 		case types.Int:
-			out[key] = generateIntegerData(
+			out[key] = generator.GenerateIntegerData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				size,
 			)
 		case types.Float:
-			out[key] = generateFloatData(
+			out[key] = generator.GenerateFloatData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				size,
@@ -68,8 +69,8 @@ func (a *HTTPAgent) GenerateWithFixedSize(modelSpec types.ModelSpec, size int) (
 	return out, nil
 }
 
-func (a *HTTPAgent) GenerateWithinRange(modelSpec types.ModelSpec, lowerBound int, upperBound int) (DataGen, error) {
-	out := make(DataGen)
+func (a *HTTPAgent) GenerateWithinRange(modelSpec types.ModelSpec, lowerBound int, upperBound int) (generator.DataGen, error) {
+	out := make(generator.DataGen)
 
 	if lowerBound <= 0 {
 		return nil, errors.New("lower bound must be greater than zero")
@@ -82,15 +83,15 @@ func (a *HTTPAgent) GenerateWithinRange(modelSpec types.ModelSpec, lowerBound in
 	for key, value := range modelSpec {
 		switch value.Dtype {
 		case types.String:
-			out[key] = generateStringData(value.Constraint.StringConstraint.Values, upperBound)[lowerBound:upperBound]
+			out[key] = generator.GenerateStringData(value.Constraint.StringConstraint.Values, upperBound)[lowerBound:upperBound]
 		case types.Int:
-			out[key] = generateIntegerData(
+			out[key] = generator.GenerateIntegerData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				upperBound,
 			)[lowerBound:upperBound]
 		case types.Float:
-			out[key] = generateFloatData(
+			out[key] = generator.GenerateFloatData(
 				value.Constraint.NumericConstraint.Mean,
 				value.Constraint.NumericConstraint.StandardDeviation,
 				upperBound,

@@ -1,4 +1,4 @@
-package agents
+package generator
 
 import (
 	"math/rand"
@@ -14,7 +14,7 @@ type Generator interface {
 	GenerateWithinRange(modelSpec types.ModelSpec, lowerBound int, higherBound int) (DataGen, error)
 }
 
-func generateStringData(values []string, size int) []string {
+func GenerateStringData(values []string, size int) []string {
 	out := make([]string, size)
 
 	for i := range out {
@@ -24,7 +24,7 @@ func generateStringData(values []string, size int) []string {
 	return out
 }
 
-func generateFloatData(mean float64, std float64, size int) []float64 {
+func GenerateFloatData(mean float64, std float64, size int) []float64 {
 	out := make([]float64, size)
 
 	for i := range out {
@@ -34,7 +34,7 @@ func generateFloatData(mean float64, std float64, size int) []float64 {
 	return out
 }
 
-func generateIntegerData(mean float64, std float64, size int) []int64 {
+func GenerateIntegerData(mean float64, std float64, size int) []int64 {
 	out := make([]int64, size)
 
 	for i := range out {
