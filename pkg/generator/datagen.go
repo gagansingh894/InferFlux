@@ -18,7 +18,7 @@ func GenerateStringData(values []string, size int) []string {
 	out := make([]string, size)
 
 	for i := range out {
-		out[i] = values[rand.Intn(size)]
+		out[i] = values[rand.Intn(len(values))]
 	}
 
 	return out
